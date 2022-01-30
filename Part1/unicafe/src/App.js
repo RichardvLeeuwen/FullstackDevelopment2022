@@ -20,12 +20,22 @@ const App = () => {
   const [bad, setBad] = useState(0)
 
   const title = 'Please give unicafe feedback'
+  const statTitle = 'statistics'
+
+  const incGood = () => setGood(good+1)
+  const incNeutral = () => setNeutral(neutral+1)
+  const incBad = () => setBad(bad+1)
+
   return (
     <div>
       <Header header={title}/>
-      <Button clickFunc={()=>console.log('test')} description={"good"}/>
-      <Button clickFunc={()=>console.log('test1')} description={"neutral"}/>
-      <Button clickFunc={()=>console.log('test2')} description={"bad"}/>
+      <Button clickFunc={incGood} description={"Good"}/>
+      <Button clickFunc={incNeutral} description={"Neutral"}/>
+      <Button clickFunc={incBad} description={"Bad"}/>
+      <Header header={statTitle}/>
+      <p>{'Good feedback total: '+ good}</p>
+      <p>{'Neutral feedback total: '+ neutral}</p>
+      <p>{'Bad feedback total: '+ bad}</p>
     </div>
   )
 }
