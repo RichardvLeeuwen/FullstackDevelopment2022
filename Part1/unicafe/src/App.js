@@ -37,14 +37,6 @@ const AverageFeedback = ({good, neutral, bad}) => { //good counts for 1, neutral
   const badScore = bad * -1
   const averageScore = (goodScore+neutralScore+badScore)/(total)
 
-  if(total === 0) {
-    return (
-      <div>
-        <p>Average feedback: Unavailable</p>
-      </div>
-    )
-  }
-
   return (
     <div>
       <p>Average feedback: {averageScore}</p>
@@ -56,14 +48,6 @@ const PostiveFeedbackPercentage = ({good, neutral, bad}) => {
   const total = good+neutral+bad
   const positiveScore = (good/(total))*100
 
-  if(total === 0) {
-    return (
-      <div>
-        <p>Positive feedback: Unavailable</p>
-      </div>
-    )
-  }
-
   return (
     <div>
       <p>Positive percentage feedback: {positiveScore} %</p>
@@ -73,6 +57,16 @@ const PostiveFeedbackPercentage = ({good, neutral, bad}) => {
 
 const Statistics = ({feedbackTypes, good, neutral, bad}) => {
   const statTitle = 'statistics'
+  const total = good+neutral+bad
+
+  if(total === 0) {
+    return (
+      <div>
+        <Header header={statTitle}/>
+        <p>No feedback has been given</p>
+      </div>
+    )
+  }
 
   return (
     <div>
