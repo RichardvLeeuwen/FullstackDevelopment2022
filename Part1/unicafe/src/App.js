@@ -14,7 +14,7 @@ const Button = ({ clickFunc, description }) => (  //similar to as shown in the t
     </button>
 )
 
-const ShowFeedback = ({type, amount}) => {
+const StatisticsLine = ({type, amount}) => {
   return (
     <div>
       <p>{type}: {amount}</p>
@@ -23,9 +23,10 @@ const ShowFeedback = ({type, amount}) => {
 }
 
 const TotalFeedback = ({good, neutral, bad}) => {
+  const type = 'All feedback'
   return (
     <div>
-      <p>All feedback: {good+neutral+bad}</p>
+      <StatisticsLine type={type} amount={good+neutral+bad}/>
     </div>
   )
 }
@@ -36,10 +37,11 @@ const AverageFeedback = ({good, neutral, bad}) => { //good counts for 1, neutral
   const neutralScore = neutral * 0
   const badScore = bad * -1
   const averageScore = (goodScore+neutralScore+badScore)/(total)
+  const type = 'Average feedback'
 
   return (
     <div>
-      <p>Average feedback: {averageScore}</p>
+      <StatisticsLine type={type} amount={averageScore}/>
     </div>
   )
 }
@@ -47,10 +49,12 @@ const AverageFeedback = ({good, neutral, bad}) => { //good counts for 1, neutral
 const PostiveFeedbackPercentage = ({good, neutral, bad}) => {
   const total = good+neutral+bad
   const positiveScore = (good/(total))*100
-
+  const type = 'Positive percentage feedback'
+  const amount = positiveScore + ' %'
+  
   return (
     <div>
-      <p>Positive percentage feedback: {positiveScore} %</p>
+      <StatisticsLine type={type} amount={amount}/>
     </div>
   )
 }
@@ -71,9 +75,9 @@ const Statistics = ({feedbackTypes, good, neutral, bad}) => {
   return (
     <div>
       <Header header={statTitle}/>
-      <ShowFeedback type={feedbackTypes[0]} amount={good}/>
-      <ShowFeedback type={feedbackTypes[1]} amount={neutral}/>
-      <ShowFeedback type={feedbackTypes[2]} amount={bad}/>
+      <StatisticsLine type={feedbackTypes[0]} amount={good}/>
+      <StatisticsLine type={feedbackTypes[1]} amount={neutral}/>
+      <StatisticsLine type={feedbackTypes[2]} amount={bad}/>
       <TotalFeedback good={good} neutral={neutral} bad={bad}/>
       <AverageFeedback good={good} neutral={neutral} bad={bad}/>
       <PostiveFeedbackPercentage good={good} neutral={neutral} bad={bad}/>
