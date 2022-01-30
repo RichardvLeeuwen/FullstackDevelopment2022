@@ -71,13 +71,28 @@ const PostiveFeedbackPercentage = ({good, neutral, bad}) => {
   )
 }
 
+const Statistics = ({feedbackTypes, good, neutral, bad}) => {
+  const statTitle = 'statistics'
+
+  return (
+    <div>
+      <Header header={statTitle}/>
+      <ShowFeedback type={feedbackTypes[0]} amount={good}/>
+      <ShowFeedback type={feedbackTypes[1]} amount={neutral}/>
+      <ShowFeedback type={feedbackTypes[2]} amount={bad}/>
+      <TotalFeedback good={good} neutral={neutral} bad={bad}/>
+      <AverageFeedback good={good} neutral={neutral} bad={bad}/>
+      <PostiveFeedbackPercentage good={good} neutral={neutral} bad={bad}/>
+    </div>
+  )
+}
+
 const App = () => {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
   const title = 'Please give unicafe feedback'
-  const statTitle = 'statistics'
   const feedbackTypes = ['Good', 'Neutral', 'Bad']
 
   const incGood = () => setGood(good+1)
@@ -90,13 +105,7 @@ const App = () => {
       <Button clickFunc={incGood} description={feedbackTypes[0]}/>
       <Button clickFunc={incNeutral} description={feedbackTypes[1]}/>
       <Button clickFunc={incBad} description={feedbackTypes[2]}/>
-      <Header header={statTitle}/>
-      <ShowFeedback type={feedbackTypes[0]} amount={good}/>
-      <ShowFeedback type={feedbackTypes[1]} amount={neutral}/>
-      <ShowFeedback type={feedbackTypes[2]} amount={bad}/>
-      <TotalFeedback good={good} neutral={neutral} bad={bad}/>
-      <AverageFeedback good={good} neutral={neutral} bad={bad}/>
-      <PostiveFeedbackPercentage good={good} neutral={neutral} bad={bad}/>
+      <Statistics feedbackTypes={feedbackTypes} good={good} neutral={neutral} bad={bad}/>
     </div>
   )
 }
