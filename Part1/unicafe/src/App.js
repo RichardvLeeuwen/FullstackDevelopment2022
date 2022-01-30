@@ -16,18 +16,17 @@ const Button = ({ clickFunc, description }) => (  //similar to as shown in the t
 
 const StatisticsLine = ({type, amount}) => {
   return (
-    <div>
-      <p>{type}: {amount}</p>
-    </div>
+    <tr>
+      <td>{type}</td>
+      <td>{amount}</td>
+    </tr>
   )
 }
 
 const TotalFeedback = ({good, neutral, bad}) => {
   const type = 'All feedback'
   return (
-    <div>
-      <StatisticsLine type={type} amount={good+neutral+bad}/>
-    </div>
+    <StatisticsLine type={type} amount={good+neutral+bad}/>
   )
 }
 
@@ -40,22 +39,18 @@ const AverageFeedback = ({good, neutral, bad}) => { //good counts for 1, neutral
   const type = 'Average feedback'
 
   return (
-    <div>
-      <StatisticsLine type={type} amount={averageScore}/>
-    </div>
+    <StatisticsLine type={type} amount={averageScore}/>
   )
 }
 
 const PostiveFeedbackPercentage = ({good, neutral, bad}) => {
   const total = good+neutral+bad
   const positiveScore = (good/(total))*100
-  const type = 'Positive percentage feedback'
+  const type = 'Positive feedback percentage'
   const amount = positiveScore + ' %'
-  
+
   return (
-    <div>
-      <StatisticsLine type={type} amount={amount}/>
-    </div>
+    <StatisticsLine type={type} amount={amount}/>
   )
 }
 
@@ -75,12 +70,16 @@ const Statistics = ({feedbackTypes, good, neutral, bad}) => {
   return (
     <div>
       <Header header={statTitle}/>
-      <StatisticsLine type={feedbackTypes[0]} amount={good}/>
-      <StatisticsLine type={feedbackTypes[1]} amount={neutral}/>
-      <StatisticsLine type={feedbackTypes[2]} amount={bad}/>
-      <TotalFeedback good={good} neutral={neutral} bad={bad}/>
-      <AverageFeedback good={good} neutral={neutral} bad={bad}/>
-      <PostiveFeedbackPercentage good={good} neutral={neutral} bad={bad}/>
+      <table>
+        <tbody>
+          <StatisticsLine type={feedbackTypes[0]} amount={good}/>
+          <StatisticsLine type={feedbackTypes[1]} amount={neutral}/>
+          <StatisticsLine type={feedbackTypes[2]} amount={bad}/>
+          <TotalFeedback good={good} neutral={neutral} bad={bad}/>
+          <AverageFeedback good={good} neutral={neutral} bad={bad}/>
+          <PostiveFeedbackPercentage good={good} neutral={neutral} bad={bad}/>
+        </tbody>
+      </table>
     </div>
   )
 }
