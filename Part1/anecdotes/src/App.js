@@ -6,6 +6,12 @@ const Button = ({ clickFunc, description }) => (  //similar to as shown in the t
     </button>
 )
 
+const DisplayVotes = ({votes, selected}) => {
+  return (
+    <p>Total votes: {votes[selected]}</p>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often',
@@ -18,8 +24,10 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [votes, setVote] = useState(Array(anecdotes.length).fill(0))
 
   const nextAnec = 'Next anecdote'
+  const voteText = 'Upvote'
 
   const selectRandomAnecdote = () => {
     let nextAnecdoteNum = Math.floor(Math.random() * anecdotes.length)
@@ -29,10 +37,18 @@ const App = () => {
     setSelected(nextAnecdoteNum)
   }
 
+  const upvote = () => {
+    const votesCopy = {...votes}
+    votesCopy[selected] += 1
+    setVote(votesCopy)
+  }
+
   return (
     <div>
       <p>{anecdotes[selected]}</p>
+      <DisplayVotes votes={votes} selected={selected}/>
       <Button clickFunc={selectRandomAnecdote} description={nextAnec}/>
+      <Button clickFunc={upvote} description={voteText}/>
     </div>
   )
 }
