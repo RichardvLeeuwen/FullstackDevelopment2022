@@ -93,15 +93,13 @@ const App = () => {
     }
   } 
 
-  const filteredPeople = showPersons()
-
   return (
     <div>
       <Header header={phonebookTitle}/>
       <PhoneFilter inputNameValue={newFilter} inputNameChangeFunc={handleFilterChange}/>
       <PhoneForm submitFunc={addPerson} inputNameValue={newName} inputNameChangeFunc={handleNameChange} inputPhoneValue={newNumber} inputPhoneChangeFunc={handleNumberChange} />
       <Header header={numbersTitle}/>
-      {filteredPeople.map((person) => <Person key={person.name} name={person.name} number={person.number}/>)}
+      {showPersons().map((person) => <Person key={person.name} name={person.name} number={person.number}/>)}
     </div>
   )
 }
