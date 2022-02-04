@@ -1,11 +1,12 @@
 import React from 'react'
+import Button from './Button'
 
-const Country = ({ name }) => {
+const Country = ({ name, filFunc }) => {
+  const buttonText = 'show'
   return (
     <div>
-      <p>
-        {name}
-      </p>
+      {name}
+      <Button clickFunc={filFunc} description={buttonText} name={name}/>
     </div>
   )
 }

@@ -30,7 +30,7 @@ const App = () => {
   return (
     <div>
       <NameFilter inputNameValue={newFilter} inputNameChangeFunc={handleFilterChange} />
-      <CountriesDisplay countries={showCountries()} />
+      <CountriesDisplay countries={showCountries()} filterFunc={setNewFilter} />
     </div>
   )
 }
