@@ -1,50 +1,8 @@
 import { useState } from 'react'
-
-const Person = ({ name, number }) => {
-  return (
-    <div>
-      <p>
-        {name} {number}
-      </p>
-    </div>
-  )
-}
-
-const Header = ({header}) => {
-  return (
-    <div>
-      <h2>{header}</h2>
-    </div>
-  )
-}
-
-const PhoneForm = ({submitFunc, inputNameValue, inputNameChangeFunc,inputPhoneValue, inputPhoneChangeFunc }) => {
-  const formTitle = "Add a new person"
-
-  return (
-    <form onSubmit={submitFunc}>
-      <Header header={formTitle}/>
-      <div>
-        name: <input value={inputNameValue} onChange={inputNameChangeFunc}/>
-        <br></br>
-        number: <input value={inputPhoneValue} onChange={inputPhoneChangeFunc}/>
-      </div>
-      <div>
-        <button type="submit">add</button>
-      </div>
-    </form>
-  )
-}
-
-const PhoneFilter = ({inputNameValue, inputNameChangeFunc }) => {
-  const formTitle = "filter shown with"
-
-  return (
-    <div>
-      {formTitle} <input value={inputNameValue} onChange={inputNameChangeFunc}/>        
-    </div>
-  )
-}
+import PersonsDisplay from './components/PersonsDisplay'
+import Header from './components/Header'
+import PhoneForm from './components/PhoneForm'
+import NameFilter from './components/NameFilter'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -56,6 +14,7 @@ const App = () => {
 
   const phonebookTitle = "Phonebook"
   const numbersTitle = "Numbers"
+  const formTitle = "Add a new person"
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -96,10 +55,11 @@ const App = () => {
   return (
     <div>
       <Header header={phonebookTitle}/>
-      <PhoneFilter inputNameValue={newFilter} inputNameChangeFunc={handleFilterChange}/>
-      <PhoneForm submitFunc={addPerson} inputNameValue={newName} inputNameChangeFunc={handleNameChange} inputPhoneValue={newNumber} inputPhoneChangeFunc={handleNumberChange} />
+      <NameFilter inputNameValue={newFilter} inputNameChangeFunc={handleFilterChange}/>
+      <Header header={formTitle}/>
+      <PhoneForm submitFunc={addPerson} inputNameValue={newName} inputNameChangeFunc={handleNameChange} inputPhoneValue={newNumber} inputPhoneChangeFunc={handleNumberChange}/>
       <Header header={numbersTitle}/>
-      {showPersons().map((person) => <Person key={person.name} name={person.name} number={person.number}/>)}
+      <PersonsDisplay persons={showPersons()}/>
     </div>
   )
 }
