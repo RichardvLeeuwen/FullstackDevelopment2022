@@ -5,6 +5,7 @@ import PhoneForm from './components/PhoneForm'
 import NameFilter from './components/NameFilter'
 import Phonebook from './services/Phonebook'
 import SuccessMessage from './components/SuccessMessage'
+import FailureMessage from './components/FailureMessage'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -12,6 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
   const [successMsg, setSuccessMsg ] = useState(null)
+  const [failureMsg, setFailureMsg ] = useState(null)
 
   const phonebookTitle = "Phonebook"
   const numbersTitle = "Numbers"
@@ -36,8 +38,11 @@ const App = () => {
               setSuccessMsg(null)
             }, 5000)
           })
-        .catch(error => { alert(
-          `The person does no no longer exist`)
+        .catch(error => { 
+          setFailureMsg(`The person does no longer exist`)
+          setTimeout(() => {
+            setFailureMsg(null)
+          }, 5000)
           setPersons(persons.filter(person => person.name !== newPerson.name))
           setNewName('')
           setNewNumber('')
@@ -55,8 +60,11 @@ const App = () => {
           setSuccessMsg(null)
         }, 5000)
       })
-    .catch(error => { alert(
-      `The person does no no longer exist`)
+    .catch(error => { 
+      setFailureMsg(`Adding the person to the database failed`)
+      setTimeout(() => {
+        setFailureMsg(null)
+      }, 5000)
       setPersons(persons.filter(person => person.name !== newPerson.name))
       setNewName('')
       setNewNumber('')
@@ -74,8 +82,11 @@ const App = () => {
             setSuccessMsg(null)
           }, 5000)
         })
-      .catch(error => { alert(
-        `The person does no no longer exist`)
+      .catch(error => { 
+        setFailureMsg(`The person is already deleted`)
+        setTimeout(() => {
+          setFailureMsg(null)
+        }, 5000)
         setPersons(persons.filter(person => person.name !== name))
       })
     }
@@ -113,6 +124,7 @@ const App = () => {
     <div>
       <Header header={phonebookTitle}/>
       <SuccessMessage message={successMsg}/>
+      <FailureMessage message={failureMsg}/>
       <NameFilter inputNameValue={newFilter} inputNameChangeFunc={handleFilterChange}/>
       <Header header={formTitle}/>
       <PhoneForm submitFunc={addPerson} inputNameValue={newName} inputNameChangeFunc={handleNameChange} inputPhoneValue={newNumber} inputPhoneChangeFunc={handleNumberChange}/>
