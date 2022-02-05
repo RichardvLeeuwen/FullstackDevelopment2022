@@ -3,7 +3,7 @@ import PersonsDisplay from './components/PersonsDisplay'
 import Header from './components/Header'
 import PhoneForm from './components/PhoneForm'
 import NameFilter from './components/NameFilter'
-import axios from 'axios'
+import Phonebook from './services/Phonebook'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -17,19 +17,56 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    if(persons.some(person => person.name === newName)){
-      window.alert(`${newName} is already added to the phonebook`)
-      return
-    }
     const newPerson = {
       name: newName,
       number: newNumber
     }
-    setPersons(persons.concat(newPerson))
-    setNewName('')
-    setNewNumber('')
+    if(persons.some(person => person.name === newName)){
+      if(window.confirm(`${newName} is already added to the phonebook, would you like to replace the old number with the new one?`)) {
+        const oldPerson = persons.filter(person => person.name === newName) //find() was probably easier in hindsight
+        Phonebook.updatePerson(oldPerson[0].id, newPerson)
+          .then(updatedPerson => {
+            setPersons(persons.map(person => person.id !== oldPerson[0].id ? person : updatedPerson))
+            setNewName('')
+            setNewNumber('')
+          })
+        .catch(error => { alert(
+          `The person does no no longer exist`)
+          setPersons(persons.filter(person => person.name !== newPerson.name))
+          setNewName('')
+          setNewNumber('')
+        })
+      }
+      return
+    }
+    Phonebook.createPerson(newPerson)
+      .then(createdPerson => {
+        setPersons(persons.concat(createdPerson))
+        setNewName('')
+        setNewNumber('')
+      })
+    .catch(error => { alert(
+      `The person does no no longer exist`)
+      setPersons(persons.filter(person => person.name !== newPerson.name))
+      setNewName('')
+      setNewNumber('')
+    })
   }
 
+  const deletePerson = name => {
+    const deleteThisPerson = persons.find(person => person.name === name)
+    if(window.confirm(`Are you sure you want to delete ${deleteThisPerson.name}? `)) {
+      Phonebook.deletePerson(deleteThisPerson.id)
+        .then(()=> {
+          setPersons(persons.filter(person => person.name !== name))
+        })
+      .catch(error => { alert(
+        `The person does no no longer exist`)
+        setPersons(persons.filter(person => person.name !== name))
+      })
+    }
+  }
+  
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
@@ -51,11 +88,11 @@ const App = () => {
     }
   }
   
-  useEffect(() => { //as shown in part 2, effect hooks, it fetches persons data for the initial state as asked in 2.11
-    axios.get('http://localhost:3001/persons')
-    .then(response => {
-      setPersons(response.data)
-    })
+  useEffect(() => { 
+    Phonebook.getAllPersons()
+      .then(allPersons => {
+        setPersons(allPersons)
+      })
   }, [])
 
   return (
@@ -65,7 +102,7 @@ const App = () => {
       <Header header={formTitle}/>
       <PhoneForm submitFunc={addPerson} inputNameValue={newName} inputNameChangeFunc={handleNameChange} inputPhoneValue={newNumber} inputPhoneChangeFunc={handleNumberChange}/>
       <Header header={numbersTitle}/>
-      <PersonsDisplay persons={showPersons()}/>
+      <PersonsDisplay persons={showPersons()} deleteFunc={deletePerson}/>
     </div>
   )
 }
