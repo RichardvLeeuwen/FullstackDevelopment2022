@@ -4,12 +4,14 @@ import Header from './components/Header'
 import PhoneForm from './components/PhoneForm'
 import NameFilter from './components/NameFilter'
 import Phonebook from './services/Phonebook'
+import SuccessMessage from './components/SuccessMessage'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [successMsg, setSuccessMsg ] = useState(null)
 
   const phonebookTitle = "Phonebook"
   const numbersTitle = "Numbers"
@@ -29,6 +31,10 @@ const App = () => {
             setPersons(persons.map(person => person.id !== oldPerson[0].id ? person : updatedPerson))
             setNewName('')
             setNewNumber('')
+            setSuccessMsg(`Successfully updated ${updatedPerson.name}`)
+            setTimeout(() => {
+              setSuccessMsg(null)
+            }, 5000)
           })
         .catch(error => { alert(
           `The person does no no longer exist`)
@@ -44,6 +50,10 @@ const App = () => {
         setPersons(persons.concat(createdPerson))
         setNewName('')
         setNewNumber('')
+        setSuccessMsg(`Successfully added ${createdPerson.name}`)
+        setTimeout(() => {
+          setSuccessMsg(null)
+        }, 5000)
       })
     .catch(error => { alert(
       `The person does no no longer exist`)
@@ -59,6 +69,10 @@ const App = () => {
       Phonebook.deletePerson(deleteThisPerson.id)
         .then(()=> {
           setPersons(persons.filter(person => person.name !== name))
+          setSuccessMsg(`Successfully deleted ${name}`)
+          setTimeout(() => {
+            setSuccessMsg(null)
+          }, 5000)
         })
       .catch(error => { alert(
         `The person does no no longer exist`)
@@ -98,6 +112,7 @@ const App = () => {
   return (
     <div>
       <Header header={phonebookTitle}/>
+      <SuccessMessage message={successMsg}/>
       <NameFilter inputNameValue={newFilter} inputNameChangeFunc={handleFilterChange}/>
       <Header header={formTitle}/>
       <PhoneForm submitFunc={addPerson} inputNameValue={newName} inputNameChangeFunc={handleNameChange} inputPhoneValue={newNumber} inputPhoneChangeFunc={handleNumberChange}/>
