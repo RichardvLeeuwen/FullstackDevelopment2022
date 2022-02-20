@@ -13,15 +13,25 @@ const totalLikes = (blogs) => {
 }
 
 const favouriteBlog = (blogs) => {
-  fav = blogs.reduce((sum, item) => {
+  const fav = blogs.reduce((sum, item) => {
     return sum.likes > item.likes ? sum : item
   })
 
   return [fav.title, fav.author, fav.likes]
 }
 
+const mostBlogs = (blogs) => {
+  const fav = lodash.countBy(blogs, 'author')
+  const values = Object.values(fav)
+  const mostBlogs = Math.max(...values)
+  const author = lodash.findKey(fav, function(o)  {return o === mostBlogs} )
+
+  return {author, mostBlogs}
+}
+
 module.exports = {
   dummy,
   totalLikes,
-  favouriteBlog
+  favouriteBlog,
+  mostBlogs
 }
