@@ -1,5 +1,5 @@
 import axios from 'axios'
-const url = 'http://localhost:3001/persons'
+const url = '/api/persons'
 
 //as instructed in 2.16, similar as what was shown in the example. Due to a react warning I assigned the default exports to a variable first.
 const getAllPersons = () => {
