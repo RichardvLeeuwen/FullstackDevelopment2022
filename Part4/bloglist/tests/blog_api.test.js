@@ -35,6 +35,11 @@ describe('GET blogs', () => {
         const reply = await api.get('/api/blogs')
         expect(reply.body).toHaveLength(twoBlogs.length)
     })
+    test(`blogs have 'id' property`, async () => {
+        const reply = await api.get('/api/blogs')
+        expect(reply.body[0].id).toBeDefined() //grabs a blog, checks if id property is defined
+        
+    })
 })
 afterAll(() => {
     mongoose.connection.close()
