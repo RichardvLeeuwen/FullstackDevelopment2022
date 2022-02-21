@@ -13,10 +13,10 @@ const twoBlogs = [
         likes: 1,
     },
     {
-        title: 'Note 1',
-        author: 'Tester1',
-        url: 'Note1.com',
-        likes: 1,
+        title: 'Note 2',
+        author: 'Tester2',
+        url: 'Note2.com',
+        likes: 2,
     },
 ]
 
@@ -63,6 +63,25 @@ describe('POST blog', () => {
         expect(authors).toContain('Poster')
         expect(urls).toContain('POST.com')
         expect(likesAll).toContain(10)
+    })
+    test('Verify POST blog with no likes defaults to 0', async () => { //as seen in tutorial
+        const postBlog =   {
+            title: 'POST Note2',
+            author: 'Poster2',
+            url: 'POST2.com',
+        }
+        await api.post('/api/blogs').send(postBlog).expect(201).expect('Content-Type', /application\/json/) //checks if POST request succeeds
+
+        const reply = await api.get('/api/blogs')
+        expect(reply.body).toHaveLength(twoBlogs.length+1) //checks that number of blogs is increased by one
+        const titles = reply.body.map(blog => blog.title) //checks the content
+        const authors = reply.body.map(blog => blog.author)
+        const urls = reply.body.map(blog => blog.url)
+        const likesAll = reply.body.map(blog => blog.likes)
+        expect(titles).toContain('POST Note2')
+        expect(authors).toContain('Poster2')
+        expect(urls).toContain('POST2.com')
+        expect(likesAll).toContain(0)
     })
 })
 afterAll(() => {
