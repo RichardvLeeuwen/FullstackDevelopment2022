@@ -91,6 +91,18 @@ describe('POST blog', () => {
         await api.post('/api/blogs').send(postBlog).expect(400) //checks if POST request succeeds
     })
 })
+
+describe('DELETE blog', () => {
+    test('Deleted blog successfully', async () => { //as seen in tutorial
+        const reply = await api.get('/api/blogs')
+        const id = reply.body[0].id
+        console.log(reply.body[0].id)
+        await api.delete(`/api/blogs/${id}`).expect(204)
+        const reply2 = await api.get('/api/blogs')
+        expect(reply2.body).toHaveLength(twoBlogs.length-1) //checks that number of blogs is decreased by one
+    })
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
