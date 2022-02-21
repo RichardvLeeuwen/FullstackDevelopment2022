@@ -74,6 +74,7 @@ describe('POST blog', () => {
 
         const reply = await api.get('/api/blogs')
         expect(reply.body).toHaveLength(twoBlogs.length+1) //checks that number of blogs is increased by one
+
         const titles = reply.body.map(blog => blog.title) //checks the content
         const authors = reply.body.map(blog => blog.author)
         const urls = reply.body.map(blog => blog.url)
@@ -96,10 +97,35 @@ describe('DELETE blog', () => {
     test('Deleted blog successfully', async () => { //as seen in tutorial
         const reply = await api.get('/api/blogs')
         const id = reply.body[0].id
-        console.log(reply.body[0].id)
         await api.delete(`/api/blogs/${id}`).expect(204)
         const reply2 = await api.get('/api/blogs')
         expect(reply2.body).toHaveLength(twoBlogs.length-1) //checks that number of blogs is decreased by one
+    })
+})
+
+describe('PUT blog', () => {
+    test('Updated blog likes successfully', async () => { //as seen in tutorial
+        const reply = await api.get('/api/blogs')
+        const id = reply.body[0].id
+
+        const putBlog =   {
+            title: 'Note 1',
+            author: 'Tester1',
+            url: 'Note1.com',
+            likes: 10, //from 1 to 10
+        }
+
+        await api.put(`/api/blogs/${id}`).send(putBlog)
+        const reply2 = await api.get('/api/blogs')
+
+        const titles = reply2.body.map(blog => blog.title) //checks the content with updated likes
+        const authors = reply2.body.map(blog => blog.author)
+        const urls = reply2.body.map(blog => blog.url)
+        const likesAll = reply2.body.map(blog => blog.likes)
+        expect(titles).toContain('Note 1')
+        expect(authors).toContain('Tester1')
+        expect(urls).toContain('Note1.com')
+        expect(likesAll).toContain(10)
     })
 })
 
