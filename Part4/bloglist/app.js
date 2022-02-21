@@ -1,7 +1,9 @@
 const http = require('http')
 const express = require('express')
+require('express-async-errors')
 const app = express()
 const cors = require('cors')
+const middleware = require('./utils/middleware')
 const blogsRouter = require('./controllers/blogs')
 const config= require('./utils/config')
 const logbook = require('./utils/logger')
@@ -15,5 +17,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/api/blogs', blogsRouter)
+
+app.use(middleware.errorHndler)
 
 module.exports = app

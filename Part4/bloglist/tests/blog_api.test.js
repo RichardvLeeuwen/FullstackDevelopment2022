@@ -83,6 +83,13 @@ describe('POST blog', () => {
         expect(urls).toContain('POST2.com')
         expect(likesAll).toContain(0)
     })
+    test('Verify POST blog with no title and url results in a bad request', async () => { //as seen in tutorial
+        const postBlog =   { //missing title and url
+            author: 'Poster2',
+            likes: 10,
+        }
+        await api.post('/api/blogs').send(postBlog).expect(400) //checks if POST request succeeds
+    })
 })
 afterAll(() => {
     mongoose.connection.close()
