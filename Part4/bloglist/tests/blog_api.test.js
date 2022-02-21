@@ -41,6 +41,30 @@ describe('GET blogs', () => {
         
     })
 })
+
+describe('POST blog', () => {
+    test('Verify POST blog works', async () => { //as seen in tutorial
+        const postBlog =   {
+            title: 'POST Note',
+            author: 'Poster',
+            url: 'POST.com',
+            likes: 10,
+        }
+        await api.post('/api/blogs').send(postBlog).expect(201).expect('Content-Type', /application\/json/) //checks if POST request succeeds
+
+        const reply = await api.get('/api/blogs')
+        expect(reply.body).toHaveLength(twoBlogs.length+1) //checks that number of blogs is increased by one
+
+        const titles = reply.body.map(blog => blog.title) //checks the content
+        const authors = reply.body.map(blog => blog.author)
+        const urls = reply.body.map(blog => blog.url)
+        const likesAll = reply.body.map(blog => blog.likes)
+        expect(titles).toContain('POST Note')
+        expect(authors).toContain('Poster')
+        expect(urls).toContain('POST.com')
+        expect(likesAll).toContain(10)
+    })
+})
 afterAll(() => {
     mongoose.connection.close()
 })
