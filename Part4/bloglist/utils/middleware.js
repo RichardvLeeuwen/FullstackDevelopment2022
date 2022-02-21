@@ -1,5 +1,13 @@
 const logbook = require('./logger')
 
+const tokenExtractor = (request, response, next)  => { 
+  const authorization = request.get('authorization') 
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    request.token= authorization.substring(7)
+  }
+  next()
+}
+
 const errorHndler = (error, request, response, next) => { //taken from tutorial chapter 3, moving error into middleware
     logbook.error(error.message)
     if (error.name === 'ValidationError') {
@@ -10,4 +18,4 @@ const errorHndler = (error, request, response, next) => { //taken from tutorial 
     next(error)
   }
 
-  module.exports = {errorHndler}
+  module.exports = {tokenExtractor, errorHndler}
