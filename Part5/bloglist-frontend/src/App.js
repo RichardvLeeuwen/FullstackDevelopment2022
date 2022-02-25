@@ -4,6 +4,8 @@ import blogService from './services/blogs'
 import LoginForm from './components/Loginform'
 import loginService from './services/login'
 import BlogForm from './components/BlogForm'
+import SuccessMessage from './components/SuccessMessage'
+import FailureMessage from './components/FailureMessage'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -13,6 +15,8 @@ const App = () => {
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
   const [user, setUser] = useState(null)
+  const [successMsg, setSuccessMsg ] = useState(null)
+  const [failureMsg, setFailureMsg ] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -51,10 +55,22 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    const user = await loginService.login({ username, password })
-    window.localStorage.setItem('blogUser', JSON.stringify(user)) 
-    blogService.setToken(user.token)    
-    setUser(user)
+    try{
+      const user = await loginService.login({ username, password })
+      window.localStorage.setItem('blogUser', JSON.stringify(user)) 
+      blogService.setToken(user.token)    
+      setUser(user)
+      setSuccessMsg(`Successfully logged in`)
+            setTimeout(() => {
+              setSuccessMsg(null)
+            }, 3000)
+    } 
+    catch {
+      setFailureMsg(`Wrong username or password`)
+          setTimeout(() => {
+            setFailureMsg(null)
+          }, 3000)
+    }
     setNewUsername('')
     setNewPassword('')
   }
@@ -71,8 +87,20 @@ const App = () => {
       author: author,
       url: url,
     }
-    const newBlog = await blogService.createBlog(blog) 
-    setBlogs(blogs.concat(newBlog))
+    try {
+      const newBlog = await blogService.createBlog(blog)
+        setBlogs(blogs.concat(newBlog))
+        setSuccessMsg(`Successfully added new blog`)
+              setTimeout(() => {
+                setSuccessMsg(null)
+              }, 3000)
+    }
+    catch {
+      setFailureMsg(`Failed to add blog, please try again`)
+            setTimeout(() => {
+              setFailureMsg(null)
+            }, 3000)
+    }
     setTitle('')
     setAuthor('')
     setUrl('')
@@ -83,6 +111,8 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
+        <SuccessMessage message={successMsg}/>
+        <FailureMessage message={failureMsg}/>
         <LoginForm submitFunc={handleLogin} inputNameValue={username} inputNameChangeFunc={handleNameChange} inputPasswordValue={password} inputPhoneChangeFunc={handlePasswordChange} />
       </div>
     )
@@ -91,6 +121,8 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <SuccessMessage message={successMsg}/>
+      <FailureMessage message={failureMsg}/>
       <p> {user.name} logged in <button onClick={handleLogout}>logout</button> </p>
       <h2>Create new blog</h2>
       <BlogForm submitFunc={addBlog} inputTitleValue={title} inputTitleChangeFunc={handleTitleChange} inputAuthorValue={author} inputAuthorChangeFunc={handleAuthorChange} inputUrlValue={url} inputUrlChangeFunc={handleUrlChange} />
