@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const Blog = ({blog, updateBlog, user, delFunc}) => {
+const Blog = ({ blog, updateBlog, user, delFunc }) => {
   const [visible, setVisible] = useState(false)
   const allowedAdminAcess = blog.user.username === user.username ? true : false
 
@@ -27,11 +27,11 @@ const Blog = ({blog, updateBlog, user, delFunc}) => {
     display: visible ? '' : 'none'
   }
 
-  const showDelete = { 
+  const showDelete = {
     display: allowedAdminAcess ? '' : 'none'
   }
 
-  const upvoteBlog = (event) => {
+  const upvoteBlog = () => {
     const newBlog = {
       user: blog.user,
       id: blog.id,
@@ -48,17 +48,16 @@ const Blog = ({blog, updateBlog, user, delFunc}) => {
         {blog.title} {blog.author} <button onClick={toggleVisibility}>View details</button>
       </div>
       <div style={blogStyleWhenShown}>
-      {blog.title} {blog.author} <button onClick={toggleVisibility}>Hide details</button>
-      <br></br>
-      {blog.url}
-      <br></br>
+        {blog.title} {blog.author} <button onClick={toggleVisibility}>Hide details</button>
+        <br></br>
+        {blog.url}
+        <br></br>
       likes {blog.likes} <button onClick={upvoteBlog}>Like</button>
-      <br></br>
-      <button style={showDelete} onClick={()=>delFunc(blog.id)} >Delete</button>
-      
+        <br></br>
+        <button style={showDelete} onClick={() => delFunc(blog.id)} >Delete</button>
       </div>
     </div>
-  )  
+  )
 }
 
 Blog.propTypes = {

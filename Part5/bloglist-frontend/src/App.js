@@ -47,7 +47,7 @@ const App = () => {
   
   const handleLogin = async (event) => {
     event.preventDefault()
-    try{
+    try {
       const user = await loginService.login({ username, password })
       window.localStorage.setItem('blogUser', JSON.stringify(user)) 
       blogService.setToken(user.token)    
@@ -56,8 +56,8 @@ const App = () => {
             setTimeout(() => {
               setSuccessMsg(null)
             }, 3000)
-    } 
-    catch {
+    }
+    catch { //eslint gives false token parsing error due to a known catch bug in Eslint itself
       setFailureMsg(`Wrong username or password`)
           setTimeout(() => {
             setFailureMsg(null)
