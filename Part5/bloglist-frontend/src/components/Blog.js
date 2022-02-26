@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-const Blog = ({blog, updateBlog, user}) => {
+const Blog = ({blog, updateBlog, user, delFunc}) => {
   const [visible, setVisible] = useState(false)
   const allowedAdminAcess = blog.user.username === user.username ? true : false
 
@@ -52,7 +52,7 @@ const Blog = ({blog, updateBlog, user}) => {
       <br></br>
       likes {blog.likes} <button onClick={upvoteBlog}>Like</button>
       <br></br>
-      <button style={showDelete} >Delete</button>
+      <button style={showDelete} onClick={()=>delFunc(blog.id)} >Delete</button>
       
       </div>
     </div>

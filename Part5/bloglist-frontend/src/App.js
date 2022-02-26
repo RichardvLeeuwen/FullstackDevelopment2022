@@ -109,6 +109,26 @@ const App = () => {
     }
   }
 
+  const deleteBlog = async (id) => { //updates likes
+    try {
+      if(window.confirm(`Are you sure you want to delete this blog?`)) {
+        await blogService.deleteBlog(id)
+        const mapBlogs = blogs.filter(blog => blog.id !== id)
+        setBlogs(mapBlogs.sort((a,b) => b.likes - a.likes))
+        setSuccessMsg(`Successfully deleted`)
+              setTimeout(() => {
+                setSuccessMsg(null)
+              }, 3000)
+      }
+    }
+    catch {
+      setFailureMsg(`Failed to delete, please try again`)
+            setTimeout(() => {
+              setFailureMsg(null)
+            }, 3000)
+    }
+  }
+
   
 
   if (user === null) {
@@ -133,7 +153,7 @@ const App = () => {
         <BlogForm addBlog={addBlog}  />
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} user={user} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} user={user} delFunc={deleteBlog} />
       )}
     </div>
   )
