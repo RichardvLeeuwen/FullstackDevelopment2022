@@ -20,9 +20,11 @@ const App = () => {
   const blogFormLabel = `Create blog`
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs)
-    )
+    const getBlogs = async () => {
+      const allBlogs = await blogService.getAll()
+      setBlogs(allBlogs.sort((a,b) => b.likes - a.likes))
+    }
+    getBlogs()
   }, [])
 
   useEffect(() => { //as given in the tutorial in part 5
@@ -74,11 +76,12 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
     try {
       const newBlog = await blogService.createBlog(createdBlog)
-        setBlogs(blogs.concat(newBlog))
-        setSuccessMsg(`Successfully added new blog`)
-              setTimeout(() => {
-                setSuccessMsg(null)
-              }, 3000)
+      const concBlogs = (blogs.concat(newBlog))
+      setBlogs(concBlogs.sort((a,b) => b.likes - a.likes))
+      setSuccessMsg(`Successfully added new blog`)
+            setTimeout(() => {
+              setSuccessMsg(null)
+            }, 3000)
     }
     catch {
       setFailureMsg(`Failed to add blog, please try again`)
@@ -91,7 +94,9 @@ const App = () => {
   const updateBlog = async (createdBlog) => { //updates likes
     try {
       const newBlog = await blogService.update(createdBlog.id, createdBlog)
-      setBlogs(blogs.map(blog => blog.id === createdBlog.id ? newBlog : blog))
+      const mapBlogs = blogs.map(blog => blog.id === createdBlog.id ? newBlog : blog)
+      setBlogs(mapBlogs.sort((a,b) => b.likes - a.likes))
+      //setBlogs(blogs.sort((a,b) => b.likes - a.likes))
       setSuccessMsg(`Successfully liked`)
             setTimeout(() => {
               setSuccessMsg(null)
@@ -104,6 +109,8 @@ const App = () => {
             }, 3000)
     }
   }
+
+  
 
   if (user === null) {
     return (
