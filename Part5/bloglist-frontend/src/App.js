@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import LoginForm from './components/Loginform'
@@ -6,6 +6,7 @@ import loginService from './services/login'
 import BlogForm from './components/BlogForm'
 import SuccessMessage from './components/SuccessMessage'
 import FailureMessage from './components/FailureMessage'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -17,6 +18,9 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [successMsg, setSuccessMsg ] = useState(null)
   const [failureMsg, setFailureMsg ] = useState(null)
+  const blogFormRef = useRef()
+
+  const blogFormLabel = `Create blog`
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -82,6 +86,7 @@ const App = () => {
 
   const addBlog = async (event) => {
     event.preventDefault()
+    blogFormRef.current.toggleVisibility()
     const blog = {
       title: title,
       author: author,
@@ -125,7 +130,9 @@ const App = () => {
       <FailureMessage message={failureMsg}/>
       <p> {user.name} logged in <button onClick={handleLogout}>logout</button> </p>
       <h2>Create new blog</h2>
-      <BlogForm submitFunc={addBlog} inputTitleValue={title} inputTitleChangeFunc={handleTitleChange} inputAuthorValue={author} inputAuthorChangeFunc={handleAuthorChange} inputUrlValue={url} inputUrlChangeFunc={handleUrlChange} />
+      <Togglable buttonLabel={blogFormLabel} ref={blogFormRef}>
+        <BlogForm submitFunc={addBlog} inputTitleValue={title} inputTitleChangeFunc={handleTitleChange} inputAuthorValue={author} inputAuthorChangeFunc={handleAuthorChange} inputUrlValue={url} inputUrlChangeFunc={handleUrlChange} />
+      </Togglable>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
