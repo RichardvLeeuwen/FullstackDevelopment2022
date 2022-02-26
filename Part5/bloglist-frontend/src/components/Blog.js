@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-const Blog = ({blog, updateBlog}) => {
+const Blog = ({blog, updateBlog, user}) => {
   const [visible, setVisible] = useState(false)
+  const allowedAdminAcess = blog.user.username === user.username ? true : false
 
   const toggleVisibility = () => {
     setVisible(!visible)
@@ -24,6 +25,10 @@ const Blog = ({blog, updateBlog}) => {
     display: visible ? '' : 'none'
   }
 
+  const showDelete = { 
+    display: allowedAdminAcess ? '' : 'none'
+  }
+
   const upvoteBlog = (event) => {
     const newBlog = {
       user: blog.user,
@@ -35,7 +40,6 @@ const Blog = ({blog, updateBlog}) => {
     }
     updateBlog(newBlog)
   }
-
   return (
     <div>
       <div style={blogStyleWhenHidden}>
@@ -47,6 +51,8 @@ const Blog = ({blog, updateBlog}) => {
       {blog.url}
       <br></br>
       likes {blog.likes} <button onClick={upvoteBlog}>Like</button>
+      <br></br>
+      <button style={showDelete} >Delete</button>
       
       </div>
     </div>

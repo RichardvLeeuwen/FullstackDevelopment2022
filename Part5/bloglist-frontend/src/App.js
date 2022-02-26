@@ -96,7 +96,6 @@ const App = () => {
       const newBlog = await blogService.update(createdBlog.id, createdBlog)
       const mapBlogs = blogs.map(blog => blog.id === createdBlog.id ? newBlog : blog)
       setBlogs(mapBlogs.sort((a,b) => b.likes - a.likes))
-      //setBlogs(blogs.sort((a,b) => b.likes - a.likes))
       setSuccessMsg(`Successfully liked`)
             setTimeout(() => {
               setSuccessMsg(null)
@@ -134,7 +133,7 @@ const App = () => {
         <BlogForm addBlog={addBlog}  />
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} user={user} />
       )}
     </div>
   )
