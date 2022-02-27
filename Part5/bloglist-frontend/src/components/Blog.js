@@ -52,7 +52,7 @@ const Blog = ({ blog, updateBlog, user, delFunc }) => {
         <br></br>
         {blog.url}
         <br></br>
-        likes {blog.likes} <button onClick={upvoteBlog}>Like</button>
+        likes {blog.likes} <button onClick={upvoteBlog} className="likeBut" >Like</button>
         <br></br>
         <button style={showDelete} onClick={() => delFunc(blog.id)} >Delete</button>
       </div>

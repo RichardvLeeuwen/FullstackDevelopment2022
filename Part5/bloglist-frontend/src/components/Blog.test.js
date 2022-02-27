@@ -40,4 +40,13 @@ describe('<Blog />', () => {
     expect(component.container).toHaveTextContent('Test url')
     expect(component.container).toHaveTextContent('likes')
   })
+
+  test('Click like button twice', () => {
+    const buttonView = component.container.querySelector('.viewDetailsBut')
+    fireEvent.click(buttonView)
+    const buttonLike = component.container.querySelector('.likeBut')
+    fireEvent.click(buttonLike)
+    fireEvent.click(buttonLike)
+    expect(updateBlog.mock.calls).toHaveLength(2)
+  })
 })
