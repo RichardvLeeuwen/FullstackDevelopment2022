@@ -58,6 +58,11 @@ describe('Blog app', function() {
         cy.get('.likeBut').click()
         cy.contains('likes 1', { timeout: 10000 })
       })
+      it('Deleted a post', function() {
+        cy.get('.viewDetailsBut').click()
+        cy.get('#deleteBlog').click()
+        cy.get('html').should('not.contain', 'Test title')
+      })
     })
   })
 })
