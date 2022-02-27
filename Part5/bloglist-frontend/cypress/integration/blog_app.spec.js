@@ -15,14 +15,12 @@ describe('Blog app', function() {
   })
   describe('Login', function() {
     it('Successful login', function() {
-      cy.contains('login').click()
       cy.get('#usernameLogin').type('Rich')
       cy.get('#passwordLogin').type('test')
       cy.get('#loginbutton').click()
       cy.contains('Richard v L logged in', { timeout: 10000 }) //extended timeout due to high latency
     })
     it('Failed login with wrong credentials', function() {
-      cy.contains('login').click()
       cy.get('#usernameLogin').type('Ri')
       cy.get('#passwordLogin').type('test')
       cy.get('#loginbutton').click()
@@ -46,6 +44,20 @@ describe('Blog app', function() {
       cy.get('.urlInput').type('Test url')
       cy.get('.submitBlogInput').click()
       cy.contains('Test title', { timeout: 10000 })
+    })
+    describe('When created a post', function() {
+      beforeEach(function() {
+        cy.contains('Create blog').click()
+        cy.get('.titleInput').type('Test title')
+        cy.get('.authorInput').type('Test author')
+        cy.get('.urlInput').type('Test url')
+        cy.get('.submitBlogInput').click()
+      })
+      it('Successfully liked a post', function() {
+        cy.get('.viewDetailsBut').click()
+        cy.get('.likeBut').click()
+        cy.contains('likes 1', { timeout: 10000 })
+      })
     })
   })
 })
