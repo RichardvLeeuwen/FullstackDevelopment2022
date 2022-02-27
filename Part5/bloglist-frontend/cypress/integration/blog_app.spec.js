@@ -31,4 +31,21 @@ describe('Blog app', function() {
       cy.get('html').should('not.contain', 'Richard v L logged in')
     })
   })
+  describe('When logged in', function() {
+    beforeEach(function() {
+      cy.contains('login').click()
+      cy.get('#usernameLogin').type('Rich')
+      cy.get('#passwordLogin').type('test')
+      cy.get('#loginbutton').click()
+      cy.contains('Richard v L logged in', { timeout: 10000 }) //extended timeout due to high latency
+    })
+    it('Successfully created new blog', function() {
+      cy.contains('Create blog').click()
+      cy.get('.titleInput').type('Test title')
+      cy.get('.authorInput').type('Test author')
+      cy.get('.urlInput').type('Test url')
+      cy.get('.submitBlogInput').click()
+      cy.contains('Test title', { timeout: 10000 })
+    })
+  })
 })
