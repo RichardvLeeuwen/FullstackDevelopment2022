@@ -2,12 +2,12 @@ const LoginForm = ({ submitFunc, inputNameValue, inputNameChangeFunc, inputPassw
   return (
     <form onSubmit={submitFunc}>
       <div>
-        username: <input value={inputNameValue} onChange={inputNameChangeFunc} />
+        username: <input value={inputNameValue} id='usernameLogin' onChange={inputNameChangeFunc} />
         <br></br>
-        password: <input value={inputPasswordValue} onChange={inputPhoneChangeFunc} />
+        password: <input value={inputPasswordValue} id='passwordLogin' onChange={inputPhoneChangeFunc} />
       </div>
       <div>
-        <button type="submit">login</button>
+        <button id='loginbutton' type="submit">login</button>
       </div>
     </form>
   )
