@@ -25,7 +25,7 @@ describe('<BlogForm />', () => {
 
 
     expect(addBlog.mock.calls).toHaveLength(1)
-    const blog = addBlog.mock.calls[0][0] //I pass on a full blog object so need to look inside it
+    const blog = addBlog.mock.calls[0][0] //I pass on a blog object so need to look inside it
     expect(blog.title).toBe('test title')
     expect(blog.author).toBe('test author')
     expect(blog.url).toBe('test url')
