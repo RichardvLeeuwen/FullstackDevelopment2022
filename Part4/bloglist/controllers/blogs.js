@@ -20,7 +20,7 @@ blogsRouter.post('/', middleware.userExtractor,async (request, response) => {
     author: request.body.author,
     url: request.body.url,
     likes: request.body.likes || 0,
-    user: user._id
+    user: user
   })
   const result = await blog.save()
   user.blogs = user.blogs.concat(result._id)
@@ -32,7 +32,6 @@ blogsRouter.delete('/:id',middleware.userExtractor, async (request, response) =>
   
   const user = request.user
   const blog = await Blog.findById(request.params.id)
-  console.log(blog.user)
   if(blog.user.toString() !== user._id.toString()) {
     return response.status(401).json({ error: 'owner and token do not match' })
   }
@@ -44,16 +43,16 @@ blogsRouter.delete('/:id',middleware.userExtractor, async (request, response) =>
 
 blogsRouter.put('/:id', async (request, response) => {
   const body = request.body
-
   const updatedBlog = {
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes
+    likes: body.likes,
   }
-
   const newBlog = await Blog.findByIdAndUpdate(request.params.id, updatedBlog, { new: true })
-  response.json(newBlog)
+  let retBlog = JSON.parse(JSON.stringify(newBlog))
+  retBlog['user'] = body.user
+  response.json(retBlog)
 })
 
 module.exports = blogsRouter

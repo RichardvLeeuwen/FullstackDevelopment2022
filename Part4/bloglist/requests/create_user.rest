@@ -2,6 +2,6 @@ POST http://localhost:3003/api/users
 Content-Type: application/json
 
 {
-    "username": "wow", "name": "T.Est", "passwordHash": "testt.com"
+    "username": "Rich2", "name": "Richard v L", "passwordHash": "test"
 
 }
