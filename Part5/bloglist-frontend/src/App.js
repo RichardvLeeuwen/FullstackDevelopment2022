@@ -17,7 +17,7 @@ const App = () => {
   const [failureMsg, setFailureMsg ] = useState(null)
   const blogFormRef = useRef()
 
-  const blogFormLabel = `Create blog`
+  const blogFormLabel = 'Create blog'
 
   useEffect(() => {
     const getBlogs = async () => {
@@ -30,7 +30,7 @@ const App = () => {
   useEffect(() => { //as given in the tutorial in part 5
     const loggedUserJSON = window.localStorage.getItem('blogUser')
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)      
+      const user = JSON.parse(loggedUserJSON)
       setUser(user)
       blogService.setToken(user.token)
     }
@@ -44,24 +44,24 @@ const App = () => {
     setNewPassword(event.target.value)
   }
 
-  
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
       const user = await loginService.login({ username, password })
-      window.localStorage.setItem('blogUser', JSON.stringify(user)) 
-      blogService.setToken(user.token)    
+      window.localStorage.setItem('blogUser', JSON.stringify(user))
+      blogService.setToken(user.token)
       setUser(user)
-      setSuccessMsg(`Successfully logged in`)
-            setTimeout(() => {
-              setSuccessMsg(null)
-            }, 3000)
+      setSuccessMsg('Successfully logged in')
+      setTimeout(() => {
+        setSuccessMsg(null)
+      }, 3000)
     }
-    catch { //eslint gives false token parsing error due to a known catch bug in Eslint itself
-      setFailureMsg(`Wrong username or password`)
-          setTimeout(() => {
-            setFailureMsg(null)
-          }, 3000)
+    catch(error) {
+      setFailureMsg('Wrong username or password')
+      setTimeout(() => {
+        setFailureMsg(null)
+      }, 3000)
     }
     setNewUsername('')
     setNewPassword('')
@@ -78,16 +78,16 @@ const App = () => {
       const newBlog = await blogService.createBlog(createdBlog)
       const concBlogs = (blogs.concat(newBlog))
       setBlogs(concBlogs.sort((a,b) => b.likes - a.likes))
-      setSuccessMsg(`Successfully added new blog`)
-            setTimeout(() => {
-              setSuccessMsg(null)
-            }, 3000)
+      setSuccessMsg('Successfully added new blog')
+      setTimeout(() => {
+        setSuccessMsg(null)
+      }, 3000)
     }
-    catch {
-      setFailureMsg(`Failed to add blog, please try again`)
-            setTimeout(() => {
-              setFailureMsg(null)
-            }, 3000)
+    catch(error) {
+      setFailureMsg('Failed to add blog, please try again')
+      setTimeout(() => {
+        setFailureMsg(null)
+      }, 3000)
     }
   }
 
@@ -96,40 +96,40 @@ const App = () => {
       const newBlog = await blogService.update(createdBlog.id, createdBlog)
       const mapBlogs = blogs.map(blog => blog.id === createdBlog.id ? newBlog : blog)
       setBlogs(mapBlogs.sort((a,b) => b.likes - a.likes))
-      setSuccessMsg(`Successfully liked`)
-            setTimeout(() => {
-              setSuccessMsg(null)
-            }, 3000)
+      setSuccessMsg('Successfully liked')
+      setTimeout(() => {
+        setSuccessMsg(null)
+      }, 3000)
     }
-    catch {
-      setFailureMsg(`Failed to like, please try again`)
-            setTimeout(() => {
-              setFailureMsg(null)
-            }, 3000)
+    catch(error) {
+      setFailureMsg('Failed to like, please try again')
+      setTimeout(() => {
+        setFailureMsg(null)
+      }, 3000)
     }
   }
 
   const deleteBlog = async (id) => { //updates likes
     try {
-      if(window.confirm(`Are you sure you want to delete this blog?`)) {
+      if(window.confirm('Are you sure you want to delete this blog?')) {
         await blogService.deleteBlog(id)
         const mapBlogs = blogs.filter(blog => blog.id !== id)
         setBlogs(mapBlogs.sort((a,b) => b.likes - a.likes))
-        setSuccessMsg(`Successfully deleted`)
-              setTimeout(() => {
-                setSuccessMsg(null)
-              }, 3000)
+        setSuccessMsg('Successfully deleted')
+        setTimeout(() => {
+          setSuccessMsg(null)
+        }, 3000)
       }
     }
-    catch {
-      setFailureMsg(`Failed to delete, please try again`)
-            setTimeout(() => {
-              setFailureMsg(null)
-            }, 3000)
+    catch(error) {
+      setFailureMsg('Failed to delete, please try again')
+      setTimeout(() => {
+        setFailureMsg(null)
+      }, 3000)
     }
   }
 
-  
+
 
   if (user === null) {
     return (
