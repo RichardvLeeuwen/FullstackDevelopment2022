@@ -45,9 +45,9 @@ const Blog = ({ blog, updateBlog, user, delFunc }) => {
   return (
     <div>
       <div style={blogStyleWhenHidden} className="blogWhenHidden" >
-        {blog.title} {blog.author} <button onClick={toggleVisibility}>View details</button>
+        {blog.title} {blog.author} <button onClick={toggleVisibility} className="viewDetailsBut" >View details</button>
       </div>
-      <div style={blogStyleWhenShown}>
+      <div style={blogStyleWhenShown} className="blogWhenShown">
         {blog.title} {blog.author} <button onClick={toggleVisibility}>Hide details</button>
         <br></br>
         {blog.url}

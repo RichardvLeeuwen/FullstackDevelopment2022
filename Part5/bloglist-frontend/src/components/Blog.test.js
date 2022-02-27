@@ -1,10 +1,10 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import Blog from './Blog'
 
-test('renders hidden content only', () => {
-
+describe('<Blog />', () => {
+  let component
   const testUser = {
     username: 'TestUser',
   }
@@ -18,13 +18,26 @@ test('renders hidden content only', () => {
     },
   }
 
-
   const updateBlog = jest.fn()
   const delFunc = jest.fn()
 
-  const component = render( <Blog blog={newBlog} updateBlog={updateBlog} user={testUser} delFunc={delFunc} />   )
-  //screen.debug()
-  const div = component.container.querySelector('.blogWhenHidden')
-  screen.debug(div)
-  expect(div).toHaveStyle('display: none')
+  beforeEach(() => {
+    component = render( <Blog blog={newBlog} updateBlog={updateBlog} user={testUser} delFunc={delFunc} />   )
+  })
+
+  test('renders only title and author at start', () => {
+    expect(component.container).toHaveTextContent('Test title')
+    expect(component.container).toHaveTextContent('Test author')
+    const urlEl = screen.queryByText('Test url')
+    expect(urlEl).toBeNull()
+    const likesEl = screen.queryByText('likes')
+    expect(likesEl).toBeNull()
+  })
+
+  test('renders url and likes on button press', () => {
+    const button = component.container.querySelector('.viewDetailsBut')
+    fireEvent.click(button)
+    expect(component.container).toHaveTextContent('Test url')
+    expect(component.container).toHaveTextContent('likes')
+  })
 })
