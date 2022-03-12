@@ -22,4 +22,13 @@ const notiSlice = createSlice({
 })
 
 export const {setNoti, removeNoti} = notiSlice.actions
+
+export const setNotification = (message, time) => {
+  return async dispatch => {
+    dispatch(setNoti(`${message}`))
+    setTimeout(() => {
+        dispatch(removeNoti())
+    }, time*1000)
+  }
+}
 export default notiSlice.reducer
