@@ -3,11 +3,13 @@ import {upvote} from '../reducers/anecdoteReducer'
 
 const AnecList = () => {
     const dispatch = useDispatch()
-    const anecdotes = useSelector(state => state.sort((a,b) => b.votes - a.votes))
+    const anecdotes = useSelector(state =>  state.anecdotes)
+    const toSortAnecdotes = [...anecdotes]
+    const sortedAnecdotes = toSortAnecdotes.sort((a,b) => b.votes - a.votes)
 
     return (
         <div>
-            {anecdotes.map(anecdote =>
+            {sortedAnecdotes.map(anecdote =>
                 <div key={anecdote.id}>
                 <div>
                     {anecdote.content}
