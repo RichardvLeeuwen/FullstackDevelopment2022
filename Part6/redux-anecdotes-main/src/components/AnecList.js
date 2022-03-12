@@ -4,7 +4,10 @@ import {setNoti, removeNoti} from '../reducers/notiReducer'
 
 const AnecList = () => {
     const dispatch = useDispatch()
-    const anecdotes = useSelector(state =>  state.anecdotes)
+    const anecdotes = useSelector(state =>  {
+        const anec = state.anecdotes.filter(anecdote => anecdote.content.includes(state.filter.text))
+        return anec
+    })
     const toSortAnecdotes = [...anecdotes]
     const sortedAnecdotes = toSortAnecdotes.sort((a,b) => b.votes - a.votes)
 
