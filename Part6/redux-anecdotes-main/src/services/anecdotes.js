@@ -12,5 +12,13 @@ const createNew = async (anecdote) => {
   return response.data
 }
 
-const obj = {getAll, createNew}
+const updateAnec = async (id) => {
+  const oldAnec = await axios.get(`${baseUrl}/${id}`)
+  const newAnec = {...oldAnec.data, votes: oldAnec.data.votes + 1}
+  const response = await axios.put(`${baseUrl}/${id}`, newAnec)
+  return response.data
+}
+
+
+const obj = {getAll, createNew, updateAnec}
 export default obj
