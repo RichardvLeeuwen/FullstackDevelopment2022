@@ -8,7 +8,8 @@ import SuccessMessage from './components/SuccessMessage'
 import FailureMessage from './components/FailureMessage'
 import Togglable from './components/Togglable'
 import { setNotification } from './reducers/notiReducer'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { initBlog, newBlog } from './reducers/blogReducer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -20,15 +21,11 @@ const App = () => {
 
   const blogFormLabel = 'Create blog'
   const dispatch = useDispatch()
-
+  const redBlogs = useSelector(state => state.blogs)
 
   useEffect(() => {
-    const getBlogs = async () => {
-      const allBlogs = await blogService.getAll()
-      setBlogs(allBlogs.sort((a,b) => b.likes - a.likes))
-    }
-    getBlogs()
-  }, [])
+    dispatch(initBlog())
+  }, [dispatch])
 
   useEffect(() => { //as given in the tutorial in part 5
     const loggedUserJSON = window.localStorage.getItem('blogUser')
@@ -75,9 +72,7 @@ const App = () => {
   const addBlog = async (createdBlog) => {
     blogFormRef.current.toggleVisibility()
     try {
-      const newBlog = await blogService.createBlog(createdBlog)
-      const concBlogs = (blogs.concat(newBlog))
-      setBlogs(concBlogs.sort((a,b) => b.likes - a.likes))
+      dispatch(newBlog(createdBlog))
       dispatch(setNotification('Successfully added new blog', 3))
     }
     catch(error) {
@@ -143,7 +138,7 @@ const App = () => {
       <Togglable buttonLabel={blogFormLabel} ref={blogFormRef}>
         <BlogForm addBlog={addBlog}  />
       </Togglable>
-      {blogs.map(blog =>
+      {redBlogs.map(blog =>
         <Blog key={blog.id} blog={blog} updateBlog={updateBlog} user={user} delFunc={deleteBlog} />
       )}
     </div>
