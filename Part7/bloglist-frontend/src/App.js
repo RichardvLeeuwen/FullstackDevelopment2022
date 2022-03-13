@@ -7,17 +7,20 @@ import BlogForm from './components/BlogForm'
 import SuccessMessage from './components/SuccessMessage'
 import FailureMessage from './components/FailureMessage'
 import Togglable from './components/Togglable'
+import { setNotification } from './reducers/notiReducer'
+import { useDispatch } from 'react-redux'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setNewUsername] = useState('')
   const [password, setNewPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [successMsg, setSuccessMsg ] = useState(null)
   const [failureMsg, setFailureMsg ] = useState(null)
   const blogFormRef = useRef()
 
   const blogFormLabel = 'Create blog'
+  const dispatch = useDispatch()
+
 
   useEffect(() => {
     const getBlogs = async () => {
@@ -52,10 +55,7 @@ const App = () => {
       window.localStorage.setItem('blogUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
-      setSuccessMsg('Successfully logged in')
-      setTimeout(() => {
-        setSuccessMsg(null)
-      }, 3000)
+      dispatch(setNotification('Successfully logged in', 3))
     }
     catch(error) {
       setFailureMsg('Wrong username or password')
@@ -78,10 +78,7 @@ const App = () => {
       const newBlog = await blogService.createBlog(createdBlog)
       const concBlogs = (blogs.concat(newBlog))
       setBlogs(concBlogs.sort((a,b) => b.likes - a.likes))
-      setSuccessMsg('Successfully added new blog')
-      setTimeout(() => {
-        setSuccessMsg(null)
-      }, 3000)
+      dispatch(setNotification('Successfully added new blog', 3))
     }
     catch(error) {
       setFailureMsg('Failed to add blog, please try again')
@@ -96,10 +93,7 @@ const App = () => {
       const newBlog = await blogService.update(createdBlog.id, createdBlog)
       const mapBlogs = blogs.map(blog => blog.id === createdBlog.id ? newBlog : blog)
       setBlogs(mapBlogs.sort((a,b) => b.likes - a.likes))
-      setSuccessMsg('Successfully liked')
-      setTimeout(() => {
-        setSuccessMsg(null)
-      }, 3000)
+      dispatch(setNotification('Successfully liked', 3))
     }
     catch(error) {
       setFailureMsg('Failed to like, please try again')
@@ -115,10 +109,7 @@ const App = () => {
         await blogService.deleteBlog(id)
         const mapBlogs = blogs.filter(blog => blog.id !== id)
         setBlogs(mapBlogs.sort((a,b) => b.likes - a.likes))
-        setSuccessMsg('Successfully deleted')
-        setTimeout(() => {
-          setSuccessMsg(null)
-        }, 3000)
+        dispatch(setNotification('Successfully deleted', 3))
       }
     }
     catch(error) {
@@ -135,7 +126,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
-        <SuccessMessage message={successMsg}/>
+        <SuccessMessage/>
         <FailureMessage message={failureMsg}/>
         <LoginForm submitFunc={handleLogin} inputNameValue={username} inputNameChangeFunc={handleNameChange} inputPasswordValue={password} inputPhoneChangeFunc={handlePasswordChange} />
       </div>
@@ -145,7 +136,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <SuccessMessage message={successMsg}/>
+      <SuccessMessage/>
       <FailureMessage message={failureMsg}/>
       <p> {user.name} logged in <button onClick={handleLogout}>logout</button> </p>
       <h2>Create new blog</h2>
