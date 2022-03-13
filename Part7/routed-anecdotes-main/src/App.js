@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Route, Link, useMatch, Routes, useNavigate} from 'react-router-dom'
-import  { useField } from './hooks/index'
+import  { useField, useAnotherHook } from './hooks/index'
 
 const Menu = (props) => {
   const padding = {
@@ -67,6 +67,7 @@ const CreateNew = (props) => {
   const content = useField('content')
   const author =useField('author')
   const info = useField('info')
+  const reset = useAnotherHook(content.onChange, author.onChange, info.onChange)
   const navigate = useNavigate()
 
   const handleSubmit = (e) => {
@@ -98,6 +99,7 @@ const CreateNew = (props) => {
         </div>
         <button>create</button>
       </form>
+      <button {...reset} >reset</button>
     </div>
   )
 

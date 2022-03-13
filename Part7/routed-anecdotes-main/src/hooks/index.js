@@ -15,4 +15,18 @@ export const useField = (type) => {
 }
 
 // modules can have several named exports
-export const useAnotherHook = () => {}
+export const useAnotherHook = (firstField, secondField, thirdField) => {
+    const event = {
+        target: {
+            value: ''
+        }
+    }
+    const reset = () => {
+        firstField(event)
+        secondField(event)
+        thirdField(event)
+    }
+    return {
+        onClick: reset
+    }
+}
