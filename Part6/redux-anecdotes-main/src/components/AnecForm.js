@@ -1,16 +1,15 @@
-import {useDispatch} from 'react-redux'
 import {newAnec} from '../reducers/anecdoteReducer'
 import {setNotification} from '../reducers/notiReducer'
+import { connect } from 'react-redux'
 
-const AnecForm = () => {
-    const dispatch = useDispatch()
+const AnecForm = (props) => {
     
     const newAnecdote = async (event) => {
         event.preventDefault()
         const anecdote = event.target.anecdote.value
         event.target.anecdote.value = ''
-        dispatch(newAnec(anecdote))
-        dispatch(setNotification(`You created the note ${anecdote}`, 5))
+        props.newAnec(anecdote)
+        props.setNotification(`You created the note ${anecdote}`, 5)
     }
     return (
         <div>
@@ -22,4 +21,10 @@ const AnecForm = () => {
     )
 }
 
-export default AnecForm
+const mapDispatchToProps = {
+    newAnec,
+    setNotification
+  }
+
+const ConnectedAnecForm= connect(null, mapDispatchToProps)(AnecForm)
+export default ConnectedAnecForm
