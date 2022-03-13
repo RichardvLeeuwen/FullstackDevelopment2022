@@ -38,6 +38,7 @@ export const newAnec = anec => {
 
 export const upvote = id => {
   return async dispatch => {
+    console.log('hi')
     await anecService.updateAnec(id)
     dispatch(vote(id))
   }
