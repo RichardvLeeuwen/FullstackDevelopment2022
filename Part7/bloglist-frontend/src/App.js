@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import LoginForm from './components/Loginform'
@@ -6,10 +6,49 @@ import loginService from './services/login'
 import BlogForm from './components/BlogForm'
 import SuccessMessage from './components/SuccessMessage'
 import FailureMessage from './components/FailureMessage'
-import Togglable from './components/Togglable'
 import { setNotification } from './reducers/notiReducer'
 import { useDispatch, useSelector } from 'react-redux'
-import { initBlog, newBlog } from './reducers/blogReducer'
+import {  initBlog, newBlog } from './reducers/blogReducer'
+import { Route, Link, useMatch, Routes, useNavigate } from 'react-router-dom'
+
+
+const Menu = (props) => {
+  const padding = {
+    paddingRight: 5
+  }
+  return (
+    <div>
+      <div>
+        <Link style={padding} to="/">blogs</Link>
+        <Link style={padding} to="/create">create new</Link>
+      </div>
+      <Routes>
+        <Route path="/" element={<BlogList  />} />
+        <Route path="/blogs/:id" element={<Blog blog={props.mblog} updateBlog={props.updateBlog} user={props.user} delFunc={props.delFunc} />} />
+        <Route path="/create" element={<BlogCreate addBlog={props.addBlog}/>} />
+      </Routes>
+    </div>
+  )
+}
+
+const BlogList = () => {
+  const redBlogs = useSelector(state => state.blogs)
+  return (
+    <div>
+      <h2>Blogs</h2>
+      <ul>
+        {redBlogs.map(blog => <li key={blog.id}> <Link to={`/blogs/${blog.id}`}> {blog.title}</Link>  </li>)}
+      </ul>
+    </div>
+  )
+}
+
+const BlogCreate = ({ addBlog }) => (
+  <div>
+    <h2>Create new blog</h2>
+    <BlogForm addBlog={addBlog}  />
+  </div>
+)
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -17,12 +56,9 @@ const App = () => {
   const [password, setNewPassword] = useState('')
   const [user, setUser] = useState(null)
   const [failureMsg, setFailureMsg ] = useState(null)
-  const blogFormRef = useRef()
-
-  const blogFormLabel = 'Create blog'
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const redBlogs = useSelector(state => state.blogs)
-
   useEffect(() => {
     dispatch(initBlog())
   }, [dispatch])
@@ -70,10 +106,10 @@ const App = () => {
   }
 
   const addBlog = async (createdBlog) => {
-    blogFormRef.current.toggleVisibility()
     try {
       dispatch(newBlog(createdBlog))
       dispatch(setNotification('Successfully added new blog', 3))
+      navigate('/')
     }
     catch(error) {
       setFailureMsg('Failed to add blog, please try again')
@@ -115,7 +151,8 @@ const App = () => {
     }
   }
 
-
+  const match = useMatch('/blogs/:id')
+  const matchBlog = match ? redBlogs.find(blog  => blog.id === match.params.id) : null
 
   if (user === null) {
     return (
@@ -134,13 +171,7 @@ const App = () => {
       <SuccessMessage/>
       <FailureMessage message={failureMsg}/>
       <p> {user.name} logged in <button onClick={handleLogout}>logout</button> </p>
-      <h2>Create new blog</h2>
-      <Togglable buttonLabel={blogFormLabel} ref={blogFormRef}>
-        <BlogForm addBlog={addBlog}  />
-      </Togglable>
-      {redBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} user={user} delFunc={deleteBlog} />
-      )}
+      <Menu mblog={matchBlog} updateBlog={updateBlog} user={user} delFunc={deleteBlog} addBlog={addBlog}/>
     </div>
   )
 }

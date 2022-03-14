@@ -1,36 +1,8 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+const Blog = ({ blog, updateBlog }) => {
 
-const Blog = ({ blog, updateBlog, user, delFunc }) => {
-  const [visible, setVisible] = useState(false)
-  const allowedAdminAcess = blog.user.username === user.username ? true : false
-
-  const toggleVisibility = () => {
-    setVisible(!visible)
+  if(!blog) {
+    return null
   }
-
-  const blogStyleWhenHidden = { //given in exercise 5.7
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-    display: visible ? 'none' : ''
-  }
-
-  const blogStyleWhenShown = { //given in exercise 5.7
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-    display: visible ? '' : 'none'
-  }
-
-  const showDelete = {
-    display: allowedAdminAcess ? '' : 'none'
-  }
-
   const upvoteBlog = () => {
     const newBlog = {
       user: blog.user,
@@ -44,27 +16,18 @@ const Blog = ({ blog, updateBlog, user, delFunc }) => {
   }
   return (
     <div>
-      <div style={blogStyleWhenHidden} className="blogWhenHidden" >
-        {blog.title} {blog.author} <button onClick={toggleVisibility} className="viewDetailsBut" >View details</button>
-      </div>
-      <div style={blogStyleWhenShown} className="blogWhenShown">
-        {blog.title} {blog.author} <button onClick={toggleVisibility}>Hide details</button>
+      <div className="blogWhenShown">
+        <h2>{blog.title}</h2>
+        created by {blog.author}
         <br></br>
-        {blog.url}
+        more info: {blog.url}
         <br></br>
         likes {blog.likes} <button onClick={upvoteBlog} className="likeBut" >Like</button>
         <br></br>
-        <button style={showDelete} id='deleteBlog' onClick={() => delFunc(blog.id)} >Delete</button>
       </div>
     </div>
   )
 }
 
-Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
-  updateBlog: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
-  delFunc: PropTypes.func.isRequired
-}
 
 export default Blog
