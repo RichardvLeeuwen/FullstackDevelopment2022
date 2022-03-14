@@ -10,6 +10,7 @@ import { setNotification } from './reducers/notiReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import {  initBlog, newBlog } from './reducers/blogReducer'
 import { Route, Link, useMatch, Routes, useNavigate } from 'react-router-dom'
+import { Table, Button } from 'react-bootstrap'
 
 
 const Menu = (props) => {
@@ -18,7 +19,7 @@ const Menu = (props) => {
   }
   return (
     <div>
-      <div>
+      <div className="square border bg-white">
         <Link style={padding} to="/">blogs</Link>
         <Link style={padding} to="/create">create new</Link>
       </div>
@@ -35,17 +36,23 @@ const BlogList = () => {
   const redBlogs = useSelector(state => state.blogs)
   return (
     <div>
-      <h2>Blogs</h2>
-      <ul>
-        {redBlogs.map(blog => <li key={blog.id}> <Link to={`/blogs/${blog.id}`}> {blog.title}</Link>  </li>)}
-      </ul>
+      <h2 className='text-primary'>Blogs</h2>
+      <Table striped>
+        <tbody>
+          {redBlogs.map(blog => <tr key={blog.id}><td><Link to={`/blogs/${blog.id}`}> {blog.title}</Link> </td>
+            <td>
+              <p className='text-secondary'>{blog.author}</p>
+            </td>
+          </tr> )}
+        </tbody>
+      </Table>
     </div>
   )
 }
 
 const BlogCreate = ({ addBlog }) => (
   <div>
-    <h2>Create new blog</h2>
+    <h2 className='text-primary'>Create new blog</h2>
     <BlogForm addBlog={addBlog}  />
   </div>
 )
@@ -156,8 +163,8 @@ const App = () => {
 
   if (user === null) {
     return (
-      <div>
-        <h2>Log in to application</h2>
+      <div className='container bg-light'>
+        <h2 className='text-primary'>Log in to application</h2>
         <SuccessMessage/>
         <FailureMessage message={failureMsg}/>
         <LoginForm submitFunc={handleLogin} inputNameValue={username} inputNameChangeFunc={handleNameChange} inputPasswordValue={password} inputPhoneChangeFunc={handlePasswordChange} />
@@ -166,11 +173,10 @@ const App = () => {
   }
 
   return (
-    <div>
-      <h2>blogs</h2>
+    <div className='container bg-light'>
       <SuccessMessage/>
       <FailureMessage message={failureMsg}/>
-      <p> {user.name} logged in <button onClick={handleLogout}>logout</button> </p>
+      <p className='text-info'> {user.name} logged in <Button onClick={handleLogout}>logout</Button> </p>
       <Menu mblog={matchBlog} updateBlog={updateBlog} user={user} delFunc={deleteBlog} addBlog={addBlog}/>
     </div>
   )
